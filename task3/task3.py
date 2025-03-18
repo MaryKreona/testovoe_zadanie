@@ -1,4 +1,5 @@
 import json
+import sys
 
 
 def read_file(values_path, tests_path):
@@ -25,10 +26,8 @@ def read_file(values_path, tests_path):
     return tests_file
 
 
-
-
-values_path = 'values.json'
-tests_path = 'tests.json'
+values_path = sys.argv[1]
+tests_path = sys.argv[2]
 output_path = 'report.json'
 
 new_data = read_file(values_path, tests_path)
