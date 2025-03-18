@@ -1,44 +1,33 @@
 import sys
 import math
 
-def read_circle_data(file_path):
-    with open(file_path, 'r') as file:
-        x, y = map(float, file.readline().split())
-        radius = float(file.readline())
-    return (x, y, radius)
-
-def read_points(file_path):
-    with open(file_path, 'r') as file:
-        points = [tuple(map(float, line.split())) for line in file]
-    return points
-
-def point_position(circle, point):
-    x_c, y_c, radius = circle
-    x_p, y_p = point
-    distance_squared = (x_p - x_c)**2 + (y_p - y_c)**2
-    radius_squared = radius**2
-
-    if math.isclose(distance_squared, radius_squared, rel_tol=1e-9):
+def calculate_position(x, y, center_x, center_y, radius):
+    distance = math.sqrt((x - center_x) ** 2 + (y - center_y) ** 2)
+    if abs(distance - radius) <= 1e-9:
         return 0
-    elif distance_squared < radius_squared:
+    elif distance < radius:
         return 1
     else:
         return 2
 
+
 def main():
     if len(sys.argv) != 3:
-        print("Usage: python program.py <circle_file> <points_file>")
-        return
+        print("Ошибка: неверное количество аргументов.")
 
-    circle_file = sys.argv[1]
-    points_file = sys.argv[2]
 
-    circle = read_circle_data(circle_file)
-    points = read_points(points_file)
+    with open(sys.argv[1], 'r') as file1:
+        lines = file1.read().splitlines()
+        center_x, center_y = map(float, lines[0].strip().split())
+        radius = float(lines[1].strip())
 
-    for point in points:
-        position = point_position(circle, point)
-        print(position)
 
-if __name__ == "__main__":
-    main()
+    with open(sys.argv[2], 'r') as file2:
+        points = file2.read().splitlines()
+        for point in points:
+            x, y = map(float, point.strip().split())
+            position = calculate_position(x, y, center_x, center_y, radius)
+            print(position)
+
+
+main()
