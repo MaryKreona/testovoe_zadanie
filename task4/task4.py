@@ -1,7 +1,7 @@
 import sys
 
 
-def read_from_file(filename):
+def read_file(filename):
     with open(filename, 'r') as file:
         return list(map(int, file.read().split()))
 
