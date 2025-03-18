@@ -18,6 +18,6 @@ def min_moves(numbers):
 
 
 arr = sys.argv[1]
-nums = read_from_file(arr)
+nums = read_file(arr)
 result = min_moves(nums)
 print(result)
