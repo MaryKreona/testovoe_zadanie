@@ -1,6 +1,7 @@
 import sys
 import math
 
+
 def calculate_position(x, y, center_x, center_y, radius):
     distance = math.sqrt((x - center_x) ** 2 + (y - center_y) ** 2)
     if abs(distance - radius) <= 1e-9:
@@ -12,20 +13,15 @@ def calculate_position(x, y, center_x, center_y, radius):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print("Ошибка: неверное количество аргументов.")
-
-
     with open(sys.argv[1], 'r') as file1:
-        lines = file1.read().splitlines()
-        center_x, center_y = map(float, lines[0].strip().split())
-        radius = float(lines[1].strip())
-
+        lines = file1.readlines()
+        center_x, center_y = map(float, lines[0].split())
+        radius = float(lines[1])
 
     with open(sys.argv[2], 'r') as file2:
-        points = file2.read().splitlines()
+        points = file2.readlines()
         for point in points:
-            x, y = map(float, point.strip().split())
+            x, y = map(float, point.split())
             position = calculate_position(x, y, center_x, center_y, radius)
             print(position)
 

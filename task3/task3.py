@@ -1,12 +1,15 @@
 import json
 
+
 def load_json(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return json.load(file)
 
+
 def save_json(data, file_path):
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
+
 
 def pull_values(tests, values_dict):
     if isinstance(tests, list):
@@ -18,6 +21,7 @@ def pull_values(tests, values_dict):
         for key, value in tests.items():
             if isinstance(value, (dict, list)):
                 pull_values(value, values_dict)
+
 
 def main(values_path, tests_path, report_path):
     values_data = load_json(values_path)
