@@ -1,40 +1,37 @@
 import json
 
 
-def load_json(file_path):
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return json.load(file)
+def read_file(values_path, tests_path):
+    with open(values_path, 'r') as file:
+        values_file = json.load(file)
+
+    with open(tests_path, 'r') as file:
+        tests_file = json.load(file)
+
+    def add_values(data, values_dict):
+        if isinstance(data, dict):
+            for key in data:
+                if key == 'id':
+                    value_id = data[key]
+                    if value_id in values_dict:
+                        data['value'] = values_dict[value_id]
+                else:
+                    add_values(data[key], values_dict)
+        elif isinstance(data, list):
+            for item in data:
+                add_values(item, values_dict)
+
+    add_values(tests_file, values_file)
+    return tests_file
 
 
-def save_json(data, file_path):
-    with open(file_path, 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=4)
-
-
-def pull_values(tests, values_dict):
-    if isinstance(tests, list):
-        for item in tests:
-            pull_values(item, values_dict)
-    elif isinstance(tests, dict):
-        if 'id' in tests and tests['id'] in values_dict:
-            tests['value'] = values_dict[tests['id']]
-        for key, value in tests.items():
-            if isinstance(value, (dict, list)):
-                pull_values(value, values_dict)
-
-
-def main(values_path, tests_path, report_path):
-    values_data = load_json(values_path)
-    tests_data = load_json(tests_path)
-
-    values_dict = {item['id']: item['value'] for item in values_data['values']}
-
-    pull_values(tests_data, values_dict)
-
-    save_json(tests_data, report_path)
 
 
 values_path = 'values.json'
 tests_path = 'tests.json'
-report_path = 'report.json'
-main(values_path, tests_path, report_path)
+output_path = 'report.json'
+
+new_data = read_file(values_path, tests_path)
+
+with open(output_path, 'w') as file:
+    json.dump(new_data, file, indent=4)
