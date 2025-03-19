@@ -1,9 +1,8 @@
 import sys
-import math
 
 
 def calculate_position(x, y, center_x, center_y, radius):
-    distance = math.sqrt((x - center_x) ** 2 + (y - center_y) ** 2)
+    distance = ((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5
     if abs(distance - radius) <= 1e-9:
         return 0
     elif distance < radius:
